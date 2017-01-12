@@ -1,0 +1,3 @@
+/usr/local/bin/mlnet >/dev/null 2>&1 &
+sleep 5
+nohup ./daemon >/dev/null 2>&1 &

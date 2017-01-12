@@ -1,0 +1,49 @@
+#!/bin/sh
+
+# Lee el status del servidor mldonkey, elimina las primeras 6 lineas 
+#
+# echo -e "auth admin j0rasse1\nvd\nexit" | ncat 127.0.0.1 4000 | sed '1,6d'
+# 
+# Por simplificar, empleamos un fichero intermedio
+
+IFS=$'\n' read -d '' -r -a lineas < kk
+
+#echo "El fichero contiene " ${#lineas[@]} "lineas"
+#echo
+
+status="${lineas[0]}"
+
+#echo "El status del servidor es";echo  $status
+#echo;echo
+echo $status | cut -f 1 -d"|"
+
+unset lineas[0]; unset lineas[1] # Elimina las dos primeras lineas del array
+
+COMANDO="curl --request POST http://1-dot-clopez123-1185.appspot.com/Post --data-urlencode "status=\"$status\"""
+
+index=2
+count=1
+while [ $index -le ${#lineas[@]} ];do
+	A=${lineas[$index]:33}
+	B=`echo $A | rev`
+	RATE=`echo $B | cut -f 2 -d" " | rev`
+	SIZE=`echo $B | cut -f 6 -d" " | rev`
+	DONE=`echo $B | cut -f 7 -d" " | rev`
+	FILE=`echo $B | cut -f 9- -d" " | rev`
+	#echo Fichero $FILE con tamaño $SIZE
+	#echo Llevamos descargados $DONE. El ritmo actual es $RATE
+	#echo
+	C=$FILE"|"$SIZE"|"$DONE"|"$RATE 
+	COMANDO=$COMANDO" --data-urlencode linea$count=\""$C\"
+	
+	index=$((index+1))
+	count=$((count+1))
+done
+
+
+#echo Ejecutamos: $COMANDO
+#echo;echo
+
+eval "${COMANDO}"
+
+

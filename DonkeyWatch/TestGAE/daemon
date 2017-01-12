@@ -1,0 +1,9 @@
+while true
+do
+	OUT=`echo -e "auth admin j0rasse1\nvd\nexit" | ncat 127.0.0.1 4000 | sed '1,6d'`
+	DATE=`date`
+	echo "$OUT" > kk
+	echo $DATE >> log
+	./emule_stats >>log 2>&1
+	sleep 15m
+done
