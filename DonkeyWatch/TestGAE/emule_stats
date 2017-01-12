@@ -19,7 +19,7 @@ echo $status | cut -f 1 -d"|"
 
 unset lineas[0]; unset lineas[1] # Elimina las dos primeras lineas del array
 
-COMANDO="curl --request POST http://1-dot-clopez123-1185.appspot.com/Post --data-urlencode "status=\"$status\"""
+COMANDO="curl --request POST http://<your app server URL here>/Post --data-urlencode "status=\"$status\"""
 
 index=2
 count=1
